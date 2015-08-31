@@ -8,19 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.Random;
+import com.pa4373.guessingnumber.logic.NumberGuesser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Integer targetNumber;
+    private NumberGuesser ng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Random rand = new Random();
-        this.targetNumber = rand.nextInt(1000);
+        this.ng = new NumberGuesser(1000);
     }
 
     @Override
@@ -56,14 +55,18 @@ public class MainActivity extends AppCompatActivity {
             message = "The input isn't an unsigned integer.";
         } else {
             Integer number = Integer.parseInt(numberString);
-            if(number > this.targetNumber) {
-                message = String.format("smaller than %d.", number);
-            } else if (number < this.targetNumber) {
-                message = String.format("larger than %d.", number);
-            } else {
-                message = "Boom! You can try again.";
-                Random rand = new Random();
-                this.targetNumber = rand.nextInt(1000);
+            NumberGuesser.Outcome oc = this.ng.guess(number);
+            switch (oc) {
+                case LARGER:
+                    message = String.format("larger than %d.", number);
+                    break;
+                case SMALLER:
+                    message = String.format("smaller than %d.", number);
+                    break;
+                default:
+                    message = "Boom! You can try again.";
+                    this.ng.reset();
+                    break;
             }
         }
 
