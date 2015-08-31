@@ -29,6 +29,7 @@
         android:id="@+id/ok"
         android:layout_below="@+id/numberField"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="21dp" />
+        android:layout_marginTop="21dp"
+        android:onClick="onOKButtonClicked" />
 
 </RelativeLayout>

@@ -4,13 +4,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Integer targetNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Random rand = new Random();
+        this.targetNumber = rand.nextInt(1000);
     }
 
     @Override
@@ -33,5 +43,31 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onOKButtonClicked(View view) {
+        EditText numberView = (EditText) findViewById(R.id.numberField);
+        String numberString = numberView.getText().toString();
+
+        numberView.setText("");
+
+        String message;
+        if(!numberString.matches("\\d+")) {
+            message = "The input isn't an unsigned integer.";
+        } else {
+            Integer number = Integer.parseInt(numberString);
+            if(number > this.targetNumber) {
+                message = String.format("smaller than %d.", number);
+            } else if (number < this.targetNumber) {
+                message = String.format("larger than %d.", number);
+            } else {
+                message = "Boom! You can try again.";
+                Random rand = new Random();
+                this.targetNumber = rand.nextInt(1000);
+            }
+        }
+
+        TextView tv = (TextView) findViewById(R.id.msg);
+        tv.setText(message);
     }
 }
