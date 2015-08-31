@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pa4373.guessingnumber.logic.NumberGuesser;
+import com.plattysoft.leonids.ParticleSystem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     message = "Boom! You can try again.";
                     this.ng.reset();
+                    new ParticleSystem(this, 100, R.drawable.star_pink, 800)
+                            .setSpeedRange(0.2f, 0.5f)
+                            .oneShot(view, 100);
                     break;
             }
         }
-
         TextView tv = (TextView) findViewById(R.id.msg);
         tv.setText(message);
     }
