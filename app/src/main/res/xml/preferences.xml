@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="Behaviour"
+        android:key="behaviour">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="is_animation_enable"
+            android:summary="Enable boom animation"
+            android:title="Boom animation" />
+        <EditTextPreference
+            android:defaultValue="1000"
+            android:key="max_bound"
+            android:summary="Set up max bound for the game"
+            android:title="Max Bound"
+            android:inputType="number" />
+    </PreferenceCategory>
+</PreferenceScreen>

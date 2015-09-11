@@ -1,5 +1,8 @@
 package com.pa4373.guessingnumber;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,13 +17,12 @@ import com.plattysoft.leonids.ParticleSystem;
 public class MainActivity extends AppCompatActivity {
 
     private NumberGuesser ng;
+    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.ng = new NumberGuesser(1000);
     }
 
     @Override
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivityForResult(intent, 0);
             return true;
         }
 
@@ -46,6 +50,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onOKButtonClicked(View view) {
+        if (sharedPref == null) {
+            this.sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        }
+
+        if (ng == null) {
+            Integer maxBound = Integer.parseInt(sharedPref.getString("max_bound", "1000"));
+            this.ng = new NumberGuesser(maxBound);
+        }
+
         EditText numberView = (EditText) findViewById(R.id.numberField);
         String numberString = numberView.getText().toString();
 
@@ -67,9 +80,11 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     message = "Boom! You can try again.";
                     this.ng.reset();
-                    new ParticleSystem(this, 100, R.drawable.star_pink, 800)
-                            .setSpeedRange(0.2f, 0.5f)
-                            .oneShot(view, 100);
+                    if (sharedPref.getBoolean("is_animation_enable", true)) {
+                        new ParticleSystem(this, 100, R.drawable.star_pink, 800)
+                                .setSpeedRange(0.2f, 0.5f)
+                                .oneShot(view, 100);
+                    }
                     break;
             }
         }
